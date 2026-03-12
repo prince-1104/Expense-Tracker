@@ -72,5 +72,6 @@ export const authOptions: NextAuthOptions = {
 export const auth = (...args: Parameters<typeof getServerSession>) =>
   getServerSession(...args, authOptions);
 
-export const { handlers: authHandlers } = NextAuth(authOptions);
+/** Single handler for NextAuth; use as GET and POST in route.ts */
+export const nextAuthHandler = NextAuth(authOptions);
 

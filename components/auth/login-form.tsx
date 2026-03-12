@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const schema = z.object({
   email: z.string().email(),
@@ -46,7 +47,10 @@ export function LoginForm() {
   };
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-background">
+    <main className="relative flex min-h-screen items-center justify-center bg-background">
+      <div className="absolute right-4 top-4">
+        <ThemeToggle />
+      </div>
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>Log in</CardTitle>

@@ -5,11 +5,17 @@ import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { createUser } from "@/services/userService";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { signIn } from "next-auth/react";
 
 const schema = z.object({
@@ -37,7 +43,28 @@ export function SignupForm() {
   const onSubmit = async (values: FormValues) => {
     setError(null);
     try {
-      await createUser(values.email, values.password);
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email: values.email,
+          password: values.password
+        })
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        const message =
+          data?.error ??
+          (res.status === 409
+            ? "Email is already registered"
+            : "Failed to create account");
+        setError(message);
+        return;
+      }
+
       await signIn("credentials", {
         redirect: false,
         email: values.email,
@@ -50,7 +77,10 @@ export function SignupForm() {
   };
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-background">
+    <main className="relative flex min-h-screen items-center justify-center bg-background">
+      <div className="absolute right-4 top-4">
+        <ThemeToggle />
+      </div>
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>Sign up</CardTitle>

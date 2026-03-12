@@ -1,9 +1,13 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export default function HomePage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-background">
+    <main className="relative flex min-h-screen flex-col items-center justify-center bg-background">
+      <div className="absolute right-4 top-4">
+        <ThemeToggle />
+      </div>
       <div className="max-w-xl text-center space-y-6">
         <h1 className="text-4xl font-bold tracking-tight">
           Expense Tracker SaaS
