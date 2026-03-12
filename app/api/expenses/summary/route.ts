@@ -9,10 +9,20 @@ import { logError } from "@/lib/logger";
 export async function GET(request: Request) {
   try {
     const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
+    if (!session?.user?.email) {
       return NextResponse.json(fail("Unauthorized", "UNAUTHORIZED"), { status: 401 });
     }
-    const userId = session.user.id;
+    const email = session.user.email!;
+
+    const dbUser =
+      (await prisma.user.findUnique({ where: { email } })) ??
+      (await prisma.user.create({
+        data: {
+          email,
+          passwordHash: "external-auth"
+        }
+      }));
+    const userId = dbUser.id;
 
     const { searchParams } = new URL(request.url);
     const start = parseDateParam(searchParams.get("start"));

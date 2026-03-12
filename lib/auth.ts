@@ -69,9 +69,6 @@ export const authOptions: NextAuthOptions = {
   secret: process.env.AUTH_SECRET
 };
 
-export const auth = (...args: Parameters<typeof getServerSession>) =>
-  getServerSession(...args, authOptions);
-
 /** Single handler for NextAuth; use as GET and POST in route.ts */
 export const nextAuthHandler = NextAuth(authOptions);
 
